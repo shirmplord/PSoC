@@ -1,0 +1,6 @@
+D:\School\Summer 2020\SoC\PSoC Creator\4.2\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|e31c27a3-14e6-454d-8c81-73a9366c4d30
+C:\Users\DELL\OneDrive\Documents\PSoC Creator\4.2\Downloads ( 4.2).cylib\Downloads ( 4.2).cyprj|12daa1bc-8452-489e-84fe-aeb603b47dac
+D:\School\Summer 2020\SoC\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|f8529143-a3ea-4d48-a0d7-c9dcdb5c6b1d
+D:\School\Summer 2020\SoC\PSoC Creator\4.2\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|95214e5c-ed3a-403e-bfd3-aa6ddf15d1ce
+D:\School\Summer 2020\SoC\PSoC Creator\4.2\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|a81c0290-9239-4552-9be5-edeae7919768
+D:\School\Summer 2020\SoC\PSoC Creator\PSoC Spring 2020\PSoC5_Ex1.cydsn\PSoC5_Ex1.cyprj|30eb26d7-3a67-455c-be01-e503d2a05cd6
