@@ -11,6 +11,9 @@
  * 
  * ========================================
 */
+
+// anttikp: Excellent, max points 10/10
+
 #include "project.h"
 #include "stdio.h"
 
