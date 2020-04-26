@@ -14,6 +14,7 @@
 
 #include <project.h>
 #include "stdio.h"
+#include "stdlib.h"
 
 /* Project Defines */
 #define FALSE  0
@@ -61,7 +62,6 @@ int main()
     /* values for the down-sampling */
     uint32 sum = 0;
     uint32 cnt = 0;
-    float tval = 0.0;
     /* Transmit Buffer */
     char TransmitBuffer[TRANSMIT_BUFFER_SIZE];
     
@@ -126,10 +126,9 @@ int main()
                 /* Flag set => reached 0.5s threshold */
                 if (ADC_flag) 
                 {
-                    tval = sum/cnt/0xA;
                     /* Format ADC result for transmition */
                     /* The conversion of ADC value to temperature for this sensor is 10mV = 1 degree Celcius */
-                    sprintf(TransmitBuffer, "{ ADC :%lu , Temperature :%.1f }\r\n", Output, tval);
+                    sprintf(TransmitBuffer, "{ ADC :%lu , Temperature :%.1f }\r\n", Output,(float) sum/cnt/10);
                     /* Send out the data */
                     UART_1_PutString(TransmitBuffer);
                     /* Reset flags and values */
