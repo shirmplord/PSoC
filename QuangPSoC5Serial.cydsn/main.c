@@ -21,7 +21,7 @@
 #define TRUE   1
 #define TRANSMIT_BUFFER_SIZE 40
 #define THRESHOLD 5000
-#define SLAVE_ADDR 0x48u
+#define SLAVE_ADDR 0x4Du
 
 /* ISR Handler */
 CY_ISR_PROTO(ADC_ISR_Handler);
