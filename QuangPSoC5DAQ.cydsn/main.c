@@ -10,6 +10,8 @@
  * Data Acquisition and ADC conversion
  * 
  * ========================================
+ * 
+ * anttikp: works as required
 */
 
 #include <project.h>
