@@ -22,9 +22,13 @@
 #define TRANSMIT_BUFFER_SIZE 40
 #define THRESHOLD 5000
 <<<<<<< HEAD
+<<<<<<< HEAD
 #define SLAVE_ADDR 0x4A
 =======
 >>>>>>> 53bcc42d91bb203ed9a646f500c351002a176352
+=======
+#define SLAVE_ADDR 0x4A
+>>>>>>> 4d0704f26c0e4c9b5d9aa6e394334eda58ea63ae
 
 /* ISR Handler */
 CY_ISR_PROTO(ADC_ISR_Handler);
