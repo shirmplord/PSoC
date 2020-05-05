@@ -148,8 +148,6 @@ int main()
                 temp-=128;
                 I2COutput = temp;
             }
-            sprintf(TransmitBuffer, "%d\r\n", I2COutput);
-            UART_1_PutString(TransmitBuffer);
         }
 
         /*---------------SPI---------------*/
@@ -194,7 +192,7 @@ int main()
                 {
                     /* Format ADC result for transmition */
                     /* The conversion of ADC value to temperature for this sensor is 10mV = 1 degree Celcius */
-                    sprintf(TransmitBuffer, "{ ADC :%lu , Temperature :%.1f , SPI : %.1f }\r\n", ADCOutput,(float) sum/cnt/10, (float) SPIOutput/10);
+                    sprintf(TransmitBuffer, "{ ADC :%lu , Temperature :%.1f , SPI : %.1f , I2C : %d }\r\n", ADCOutput,(float) sum/cnt/10, (float) SPIOutput/10, I2COutput);
                     /* Send out the data */
                     UART_1_PutString(TransmitBuffer);
                     /* Reset flags and values */
