@@ -155,19 +155,16 @@ int main()
         if (SPIM_1_ReadTxStatus() & SPIM_1_STS_TX_FIFO_EMPTY)
         {
              /* Driving SS high with software */
-            SPISS_1_Write(TRUE);
+            SPISS_1_Write(FALSE); // anttikp: low active!!!
             /* Write to Tx buffer */
             SPIM_1_WriteTxData(SPIdummy);
-            while(SPIM_1_ReadTxStatus() & SPIM_1_STS_SPI_DONE);
+            while(!(SPIM_1_ReadRxStatus() & SPIM_1_STS_RX_FIFO_NOT_EMPTY)); // wait here until RX buffer is not empty
             /* Check for something to be sent to the Rx buffer
              * Rx status register bit 5 is set */
-            if (SPIM_1_ReadRxStatus() & SPIM_1_STS_RX_FIFO_NOT_EMPTY) 
-            {
-                /* Driving SS low with software */
-                SPISS_1_Write(FALSE);
-                /* Read data from Rx buffer */
-                SPIOutput = SPIM_1_ReadRxData();
-            }  
+            /* Driving SS low with software */
+            SPISS_1_Write(TRUE); // setting SS inactive
+            /* Read data from Rx buffer */
+            SPIOutput = (SPIM_1_ReadRxData()) & 0x0fff; // using 15-bit SPIM 
         }
         /* Check to see if an ADC conversion has completed */
         /* Check to see if Tx buffer is empty 
