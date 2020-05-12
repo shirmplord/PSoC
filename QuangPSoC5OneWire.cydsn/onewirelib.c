@@ -16,16 +16,16 @@
 /* Subprocesses */
 void SetSpeed()
 {
-    A = 6;
-    B = 64;
-    C = 60;
-    D = 10;
-    E = 9;
-    F = 55;
+    A = 6/2;
+    B = 64/2;
+    C = 60/2;
+    D = 10/2;
+    E = 9/2;
+    F = 55/2;
     G = 0;
-    H = 480;
-    I = 70;
-    J = 410;
+    H = 480/2;
+    I = 70/2;
+    J = 410/2;
 }
 /* Generate a 1-Wire reset, return 1 if no presence detect was found,
  * return 0 otherwise. */
@@ -70,7 +70,7 @@ void OWWriteByte(int data)
 }
 
 /* Read 2 1-Wire data byte and return it. */
-signed char OWReadByte(void)
+unsigned char OWReadByte(void)
 {
     int loop;
     signed char result=0;
@@ -84,12 +84,35 @@ signed char OWReadByte(void)
         OneWireD_Write(1); // Releases the bus
         CyDelayUs(E);
         // if result is one, then set MS bit        
-        result |= (OneWireD_Read()>0) ? 0x80 : 0x00;
+        result |= (OneWireD_Read()) ? 0x80 : 0x00;
         CyDelayUs(F); // Complete the time slot and 10us recovery
 
     }
     return result;
 }
-
+/* Calculate the checksum */
+unsigned char OWCRC(unsigned char *pBuf, int len)
+{
+	unsigned char loop, i, shiftedBit;
+	unsigned char crc = 0x00;
+	
+	for(loop=0; loop<len; loop++)
+	{
+		crc = (crc ^ pBuf[loop]);
+		
+		for(i=8; i>0; i--)
+		{
+			shiftedBit= (crc & 0x01);
+			crc >>= 1;
+			
+			if(shiftedBit)
+			{
+				crc = (crc ^ 0x8c);
+			}
+		}
+	}
+	
+	return crc;
+}
 
 /* [] END OF FILE */

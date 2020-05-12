@@ -22,7 +22,7 @@
 #define TRUE   1
 #define TRANSMIT_BUFFER_SIZE 40
 #define THRESHOLD 5000
-#define DEBUG 0
+#define DEBUG 1
 
 /* ISR Handler */
 CY_ISR_PROTO(ADC_ISR_Handler);
@@ -65,7 +65,7 @@ int main()
     uint32 sum = 0;
     uint32 cnt = 0;
     /* Variable to store the OneWire return byte */
-    signed char OWByte[9] = {0,};
+    unsigned char OWByte[9] = {0,};
     /* Variable to store the OneWire temperature result */
     float OWOutput = 0;
     /* OneWire flag for the delay between commands */
@@ -87,7 +87,7 @@ int main()
     ADC_DelSig_1_StartConvert();
     
     /* Send message to verify COM port is connected properly */
-    UART_1_PutString("COM Port Open");
+    UART_1_PutString("COM Port Open\r\n");
     
     /* Start the ISR */
     ADC_DelSig_1_IRQ_StartEx(ADC_ISR_Handler);
@@ -124,7 +124,8 @@ int main()
                 /* Place error handling code here */
                 break;    
         }
-#if DEBUG        
+#if DEBUG       
+        uint crc=0xff;
         CYGlobalIntDisable;
         if (OWTouchReset() == 0)
         {
@@ -136,6 +137,11 @@ int main()
             }        
         }
         CyGlobalIntEnable;
+        crc = OWCRC(Addr,7);
+        if (crc == Addr[7])
+            UART_1_PutString("True\r\n");
+        else
+            UART_1_PutString("False\r\n");
 #else
         /* OneWire Communication - Start Conversion */
         if (OWFlag == 0)
@@ -153,6 +159,7 @@ int main()
         }   //Start conversion 
         else if (OWFlag == 3)
         {
+            CyGlobalIntDisable;
             /* 0 means slave responded */
             if (OWTouchReset() == 0)
             {
@@ -165,6 +172,8 @@ int main()
                 {
                     OWByte[i] = OWReadByte();                
                 }
+                CyGlobalIntEnable;
+                OWByte[1] = OWByte[1] & 0x0f;
                 /* Store the first 2 bytes into a variable */
                 OWOutput = (OWByte[1] << 8) | (OWByte[0] & 0xFF);
                 /* Reset the flag */

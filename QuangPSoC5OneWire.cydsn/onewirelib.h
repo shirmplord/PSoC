@@ -17,6 +17,7 @@ int A,B,C,D,E,F,G,H,I,J;
 void SetSpeed();
 int OWTouchReset(void);
 void OWWriteByte(int data);
-signed char OWReadByte(void);
+unsigned char OWReadByte(void);
+unsigned char OWCRC(unsigned char *pBuf, int len);
 
 /* [] END OF FILE */
