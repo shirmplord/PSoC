@@ -22,14 +22,17 @@
 #define TRUE   1
 #define TRANSMIT_BUFFER_SIZE 40
 #define THRESHOLD 5000
-#define DEBUG 1
+#define DEBUG 0
 
 /* ISR Handler */
 CY_ISR_PROTO(ADC_ISR_Handler);
 
 /* Flag for interrupt */
 static volatile CYBIT ADC_flag = FALSE;
+static volatile CYBIT handled = FALSE;
 
+/* Subprocesses declaration */
+float bintofloat(signed int x);
 /*******************************************************************************
 * Function Name: main
 ********************************************************************************
@@ -146,6 +149,8 @@ int main()
         /* OneWire Communication - Start Conversion */
         if (OWFlag == 0)
         {
+            while(!handled) {}
+            CyGlobalIntDisable;
             /* 0 means slave responded */
             if (OWTouchReset() == 0)
             {
@@ -153,12 +158,15 @@ int main()
                 OWWriteByte(0xCC);
                 /* send convert T command */
                 OWWriteByte(0x44);
+                CyGlobalIntEnable;
+                handled = FALSE;
                 /* set flag to 1 to not go back until cleared */
                 OWFlag++;
             }
         }   //Start conversion 
         else if (OWFlag == 3)
         {
+            while(!handled) {}
             CyGlobalIntDisable;
             /* 0 means slave responded */
             if (OWTouchReset() == 0)
@@ -173,9 +181,13 @@ int main()
                     OWByte[i] = OWReadByte();                
                 }
                 CyGlobalIntEnable;
+                handled = FALSE;
+                /* Remove the first 4 MSB bits (not used) */
                 OWByte[1] = OWByte[1] & 0x0f;
-                /* Store the first 2 bytes into a variable */
-                OWOutput = (OWByte[1] << 8) | (OWByte[0] & 0xFF);
+                /* Store the first 2 bytes into a variable (integer) */
+                int temp = (OWByte[1] << 8) | (OWByte[0] & 0xF0);
+                OWOutput = temp>>4;
+                if (OWByte[1] & 0x08) OWOutput-=128;
                 /* Reset the flag */
                 OWFlag = 0;
             }
@@ -197,6 +209,7 @@ int main()
                 /* Flag set => reached 0.5s threshold */
                 if (ADC_flag) 
                 {
+                    if (OWFlag < 3) OWFlag++;                    
                     /* Format ADC result for transmition */
                     /* The conversion of ADC value to temperature for this sensor is 10mV = 1 degree Celcius */
                     sprintf(TransmitBuffer, "{ ADC :%lu , Temperature :%.1f , OneWire :%.1f }\r\n", Output,(float) sum/cnt/10, OWOutput);
@@ -206,7 +219,6 @@ int main()
                     ADC_flag = FALSE;
                     sum = 0;
                     cnt = 0;
-                    if (OWFlag < 3) OWFlag++;
                 } //output data 
                 else 
                 {
@@ -218,6 +230,16 @@ int main()
             }
         }
     }
+}
+/* Subprocesses */
+float bintofloat(signed int x) 
+{
+    union {
+        signed int  x;
+        float  f;
+    } temp;
+    temp.x = x;
+    return temp.f;
 }
 /* ISR routines */
 CY_ISR(ADC_ISR_Handler)
@@ -233,6 +255,7 @@ CY_ISR(ADC_ISR_Handler)
         clk = 0;
         ADC_flag = TRUE;
     } //reset clock and set flags
+    handled = TRUE;
     /* The interupt is automatically reset in this case */
 }
 

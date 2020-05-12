@@ -16,16 +16,16 @@
 /* Subprocesses */
 void SetSpeed()
 {
-    A = 6/2;
-    B = 64/2;
-    C = 60/2;
-    D = 10/2;
-    E = 9/2;
-    F = 55/2;
+    A = 6;
+    B = 64;
+    C = 60;
+    D = 10;
+    E = 9;
+    F = 55;
     G = 0;
-    H = 480/2;
-    I = 70/2;
-    J = 410/2;
+    H = 480;
+    I = 70;
+    J = 410;
 }
 /* Generate a 1-Wire reset, return 1 if no presence detect was found,
  * return 0 otherwise. */
