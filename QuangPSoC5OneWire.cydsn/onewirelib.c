@@ -32,11 +32,12 @@ void SetSpeed()
 int OWTouchReset(void)
 {
     int result;
+    CyDelay(G);
     OneWireD_Write(0); //Drives DQ Low
     CyDelayUs(H);
     OneWireD_Write(1); // Releases the bus
     CyDelayUs(I);
-    result = OneWireD_Read() ^ 0x01;
+    result = OneWireD_Read();
     CyDelayUs(J); // Complete the reset sequence recovery
     return result; // Return sample presence pulse result
 }

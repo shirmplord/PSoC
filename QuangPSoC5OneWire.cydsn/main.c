@@ -92,6 +92,8 @@ int main()
     /* Start the ISR */
     ADC_DelSig_1_IRQ_StartEx(ADC_ISR_Handler);
     
+    /* Set Speed */
+    SetSpeed();
     /* Start the OneWire Pin high */
     OneWireD_Write(TRUE);
     
@@ -138,7 +140,6 @@ int main()
         /* OneWire Communication - Start Conversion */
         if (OWFlag == 0)
         {
-            CYGlobalIntDisable;
             /* 0 means slave responded */
             if (OWTouchReset() == 0)
             {
@@ -149,11 +150,9 @@ int main()
                 /* set flag to 1 to not go back until cleared */
                 OWFlag++;
             }
-            CyGlobalIntEnable;
         }   //Start conversion 
         else if (OWFlag == 3)
         {
-            CYGlobalIntDisable;
             /* 0 means slave responded */
             if (OWTouchReset() == 0)
             {
@@ -171,7 +170,6 @@ int main()
                 /* Reset the flag */
                 OWFlag = 0;
             }
-            CYGlobalIntEnable;
         }   //Read the data
 #endif        
         /* Check to see if an ADC conversion has completed */
