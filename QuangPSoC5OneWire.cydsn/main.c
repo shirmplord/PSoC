@@ -51,7 +51,7 @@ float bintofloat(signed int x);
 *  None.
 *
 * Return:
-*  None.
+*  None....
 *
 *******************************************************************************/
 int main()
